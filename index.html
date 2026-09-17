@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Multi-Ping Monitor</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
+    <!-- 1° e 3° Scripts Adsterra (Geral / Anti-Adblock) -->
+    <script src="https://pl31376752.profitableratecpmnetwork.com/ef/46/eb/ef46eb06892eba8cb68187eea3cf6368.js"></script>
+    <script src="https://pl31376754.profitableratecpmnetwork.com/0c/44/22/0c442231d7997e9a19e48f69b5dc0526.js"></script>
+
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #07090e;
+            color: #38bdf8;
+            margin: 0;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 420px;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #1e293b;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+        }
+        h2 { font-size: 1rem; margin: 0; color: #f8fafc; }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #ef4444; display: inline-block; }
+        .status-dot.connected { background: #22c55e; box-shadow: 0 0 8px #22c55e; }
+        
+        .ping-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .ping-card {
+            background-color: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 6px;
+            padding: 10px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+        }
+        .target-name { color: #94a3b8; word-break: break-all; max-width: 60%; }
+        .metrics { display: flex; align-items: center; gap: 10px; }
+        .latency { font-weight: bold; font-size: 0.95rem; }
+        .latency.good { color: #22c55e; }
+        .latency.warn { color: #f59e0b; }
+        .latency.bad { color: #ef4444; }
+        
+        .badge {
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: #1e293b;
+            color: #cbd5e1;
+        }
+        .badge.active { background: #065f46; color: #34d399; }
+
+        .sponsor-btn {
+            background-color: #0284c7;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            font-family: inherit;
+            margin-bottom: 16px;
+        }
+
+        .ads-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+            margin-top: 16px;
+        }
+        .ad-box {
+            background-color: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 6px;
+            padding: 8px;
+            text-align: center;
+            overflow: auto;
+            max-width: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h2>⚡ MULTI-PING // LIVE</h2>
+            <div>
+                <span class="status-dot" id="ws-status"></span>
+                <span id="status-text" style="font-size: 0.75rem; color: #64748b;">OFF</span>
+            </div>
+        </header>
+
+        <div style="font-size: 0.75rem; color: #64748b; margin-bottom: 10px;">
+            ULTIMA ATUALIZAÇÃO: <span id="last-update">--:--:--</span>
+        </div>
+
+        <div class="ping-grid" id="ping-container">
+            <div class="ping-card">Connecting stream...</div>
+        </div>
+
+        <!-- 2° Botão Smartlink -->
+        <button class="sponsor-btn" onclick="openSmartlink()">
+            ⚡ ACESSAR PATROCÍNIO / OFERTA
+        </button>
+
+        <!-- Seção de Banners de Display (4° ao 10°) -->
+        <div class="ads-section">
+            
+            <!-- 4° Native Banner -->
+            <div class="ad-box">
+                <script async="async" data-cfasync="false" src="https://pl31376755.profitableratecpmnetwork.com/5075e0937ae123723272f15a4f0fe3b9/invoke.js"></script>
+                <div id="container-5075e0937ae123723272f15a4f0fe3b9"></div>
+            </div>
+
+            <!-- 5° Banner 160x300 -->
+            <div class="ad-box">
+                <script type="text/javascript">
+                    atOptions = { 'key' : 'd0da051bdb82182199e904db62581ea4', 'format' : 'iframe', 'height' : 300, 'width' : 160, 'params' : {} };
+                </script>
+                <script type="text/javascript" src="https://www.highrevenueformat.com/d0da051bdb82182199e904db62581ea4/invoke.js"></script>
+            </div>
+
+            <!-- 6° Banner 468x60 -->
+            <div class="ad-box">
+                <script type="text/javascript">
+                    atOptions = { 'key' : '39b7e444e3bc6df51751e25b0222f847', 'format' : 'iframe', 'height' : 60, 'width' : 468, 'params' : {} };
+                </script>
+                <script type="text/javascript" src="https://www.highrevenueformat.com/39b7e444e3bc6df51751e25b0222f847/invoke.js"></script>
+            </div>
+
+            <!-- 7° Banner 468x60 (Cópia do 6°) -->
+            <div class="ad-box">
+                <script type="text/javascript">
+                    atOptions = { 'key' : '39b7e444e3bc6df51751e25b0222f847', 'format' : 'iframe', 'height' : 60, 'width' : 468, 'params' : {} };
+                </script>
+                <script type="text/javascript" src="https://www.highrevenueformat.com/39b7e444e3bc6df51751e25b0222f847/invoke.js"></script>
+            </div>
+
+            <!-- 8° Banner 160x600 -->
+            <div class="ad-box">
+                <script type="text/javascript">
+                    atOptions = { 'key' : '7ad8c1bfcc3f7164facf4470627af70f', 'format' : 'iframe', 'height' : 600, 'width' : 160, 'params' : {} };
+                </script>
+                <script type="text/javascript" src="https://www.highrevenueformat.com/7ad8c1bfcc3f7164facf4470627af70f/invoke.js"></script>
+            </div>
+
+            <!-- 9° Banner 728x90 -->
+            <div class="ad-box">
+                <script type="text/javascript">
+                    atOptions = { 'key' : '7c82dada9a0cb5c87b1949dece087d77', 'format' : 'iframe', 'height' : 90, 'width' : 728, 'params' : {} };
+                </script>
+                <script type="text/javascript" src="https://www.highrevenueformat.com/7c82dada9a0cb5c87b1949dece087d77/invoke.js"></script>
+            </div>
+
+            <!-- 10° Banner 320x50 -->
+            <div class="ad-box">
+                <script type="text/javascript">
+                    atOptions = { 'key' : '0892f8e2b05f4e554f3e60a7790d85b0', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
+                </script>
+                <script type="text/javascript" src="https://www.highrevenueformat.com/0892f8e2b05f4e554f3e60a7790d85b0/invoke.js"></script>
+            </div>
+
+        </div>
+    </div>
+
+        <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
+
+        // URL do WebSocket
+        const WS_URL = "wss://directory-vintage-std-sunny.trycloudflare.com/ws/multiping";
+        
+        const ADMIN_TELEGRAM_ID = 5735206781;
+        
+        // 2° Novo Smartlink
+        const SMARTLINK_URL = "https://www.profitableratecpmnetwork.com/virn9qjb01?key=a4ad45efa12addc93f92f2e038e92e73";
+
+        function openSmartlink() {
+            const currentUserId = tg.initDataUnsafe?.user?.id;
+            if (currentUserId && currentUserId === ADMIN_TELEGRAM_ID) {
+                tg.openLink(SMARTLINK_URL);
+            } else {
+                tg.openLink(SMARTLINK_URL);
+            }
+        }
+
+        // Função de Gatilho de Monetização (Auto-Click / Validação)
+        function checkAndTriggerMonetization() {
+            console.log("Verificando gatilho de monetização...");
+            
+            // Se você quiser que abra o Smartlink automaticamente sob alguma condição, 
+            // a lógica vem aqui dentro. Exemplo:
+            // const currentUserId = tg.initDataUnsafe?.user?.id;
+            // se precisar disparar algo automático para o admin:
+            // if (currentUserId === ADMIN_TELEGRAM_ID) { openSmartlink(); }
+        }
+
+        // Chamada da função assim que o Mini App é carregado
+        checkAndTriggerMonetization();
+
+        // Conexão WebSocket para o Multi-Ping Live
+        function connectWS() {
+            const ws = new WebSocket(WS_URL);
+            const dot = document.getElementById('ws-status');
+            const statusText = document.getElementById('status-text');
+
+            ws.onopen = () => {
+                dot.classList.add('connected');
+                statusText.innerText = "STREAM LIVE";
+                statusText.style.color = "#22c55e";
+            };
+
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                document.getElementById('last-update').innerText = data.time;
+                
+                const container = document.getElementById('ping-container');
+                container.innerHTML = '';
+
+                data.pings.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'ping-card';
+                    
+                    let latClass = 'good';
+                    if (item.ms > 120) latClass = 'warn';
+                    if (item.ms === 0 || item.ms > 300) latClass = 'bad';
+
+                    const isProxy = item.status === 'PROXY_ACTIVE';
+
+                    card.innerHTML = `
+                        <div class="target-name">${item.target}</div>
+                        <div class="metrics">
+                            <span class="badge ${isProxy ? 'active' : ''}">${item.status}</span>
+                            <span class="latency ${latClass}">${item.ms > 0 ? item.ms + 'ms' : 'TIMEOUT'}</span>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            };
+
+            ws.onclose = () => {
+                dot.classList.remove('connected');
+                statusText.innerText = "RECONNECTING...";
+                statusText.style.color = "#f59e0b";
+                setTimeout(connectWS, 3000);
+            };
+
+            ws.onerror = () => {
+                ws.close();
+            };
+        }
+
+        // Inicia a conexão com o servidor
+        connectWS();
+    </script>
